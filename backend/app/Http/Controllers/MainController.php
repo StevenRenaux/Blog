@@ -9,7 +9,7 @@ class MainController extends Controller
      * HTTP method: GET
      */
     public function home() {
-        echo 'page d\'accueil';
+        //echo 'page d\'accueil';
 
     }
 }
