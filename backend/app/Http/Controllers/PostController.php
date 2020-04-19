@@ -17,4 +17,15 @@ class PostController extends Controller
 
         return $this->sendJsonResponse($allPosts);
     }
+
+    /**
+     * URL : /post/{id}
+     * HTTP Method : GET
+     */
+    public function show($id)
+    {
+        $Post = Post::find($id)->load('category')->load('author');
+
+        return $this->sendJsonResponse($Post);
+    }
 }

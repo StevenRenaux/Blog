@@ -35,6 +35,20 @@ $router->get(
 );
 
 /**
+ * URL : /post/{id}
+ * HTTP Method : GET
+ * Controller : PostController
+ * Method : post
+ */
+$router->get(
+    '/post/{id}',
+    [
+        'uses' => 'PostController@show',
+        'as' => 'post-show'
+    ]
+);
+
+/**
  * URL : /categories
  * HTTP Method : GET
  * Controller : CategoryController

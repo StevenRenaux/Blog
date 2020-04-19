@@ -204,16 +204,16 @@ let app = {
                     let categoryId = currentPost.category_id;
                     // méthode .replace pour ne pas avoir d'espace et pouvoir faire (#MaVieDeDev)
                     let category = currentPost.category.name.replace(/ /gi , '');
+                    let categoryData = currentPost.category.name;
 
                     // Méthode permettant de créer chaque articles
-                    app.createPost(id, title, resume, content, authorId, author, publishDate, categoryId, category);
+                    app.createPost(id, title, resume, content, authorId, author, publishDate, categoryId, category, categoryData);
                 }
-
             }
         );
     },
     // Méthode permettant de créer chaque articles en partant de loadPosts()
-    createPost: function(id, title, resume, content, authorId, author, publishDate, categoryId, category){
+    createPost: function(id, title, resume, content, authorId, author, publishDate, categoryId, category, categoryData){
         let newPostElement = document.getElementById('postTemplate').content.cloneNode(true);
         //console.log(newPostElement);
 
@@ -226,6 +226,9 @@ let app = {
         newPostElement.querySelector('.card-title a').textContent = title;
 
         newPostElement.querySelector('.card-text').textContent = resume;
+        //Ajout du texte de l'article et mise en display none
+        newPostElement.querySelector('.card-text-content').textContent = content;
+        newPostElement.querySelector('.card-text-content').style.display = "none";
 
         newPostElement.querySelector('.infos a').textContent = author;
         newPostElement.querySelector('.infos a').setAttribute('data-author-id' , authorId);
@@ -236,9 +239,9 @@ let app = {
 
         newPostElement.querySelectorAll('.card-link')[1].textContent = '#' + category;
         newPostElement.querySelectorAll('.card-link')[1].setAttribute('data-category-id' , categoryId);
-        newPostElement.querySelectorAll('.card-link')[1].setAttribute('data-category' , category);
+        newPostElement.querySelectorAll('.card-link')[1].setAttribute('data-category' , categoryData);
 
-        //Mise sur écoute du bouton de catégorie sous l'article (Méthode pour filtrer les artciles selon une catégorie)
+        //Mise sur écoute du bouton de catégorie sous l'article (Méthode pour filtrer les articles selon une catégorie)
         let filterCategoryButton = newPostElement.querySelectorAll('.card-link')[1];
         filterCategoryButton.addEventListener('click' , app.handleClickButtonForCategory);
 
@@ -246,6 +249,11 @@ let app = {
         let filterAuthorButton = newPostElement.querySelector('.infos a');
         filterAuthorButton.addEventListener('click' , app.handleClickButtonForAuthor);
 
+        //Mise sur écoute du bouton du titre de l'article (Méthode pour lire un article)
+        let titleButton = newPostElement.querySelector('.card-title a');
+        titleButton.addEventListener('click', app.handleClickButtonToRead);
+
+        // Insertion du nouvel article dans le DOM
         let parentPostElement = document.getElementById('container_posts');
         parentPostElement.prepend(newPostElement);
     },
@@ -254,8 +262,8 @@ let app = {
         //console.log('filtre catégorie');
         let filterButton = evt.currentTarget;
 
-        //console.log(filterButton.dataset.categoryId);
-        //console.log(app.categoriesList.indexOf(filterButton.dataset.category , 1));
+        console.log(filterButton.dataset.categoryId);
+        console.log(app.categoriesList.indexOf(filterButton.dataset.category , 1));
 
         if(filterButton.dataset.categoryId == app.categoriesList.indexOf(filterButton.dataset.category)){
             //console.log('Teamfront')
@@ -265,6 +273,8 @@ let app = {
             for(let i = 0 ; i < postElement.length ; i++){
                 if(postElement[i].dataset.categoryId === filterButton.dataset.categoryId){
                     postElement[i].style.display = "block";
+                    postElement[i].querySelector('.card-text').style.display = "block";
+                    postElement[i].querySelector('.card-text-content').style.display = "none";
                 }
             }
         }
@@ -285,10 +295,37 @@ let app = {
             for(let i = 0 ; i < postElement.length ; i++){
                 if(postElement[i].dataset.authorId === filterButton.dataset.authorId){
                     postElement[i].style.display = "block";
+                    postElement[i].querySelector('.card-text').style.display = "block";
+                    postElement[i].querySelector('.card-text-content').style.display = "none";
                 }
             }
         }
     },
+    // Méthode pour lire un article
+    handleClickButtonToRead: function(evt){
+        //console.log('click to read');
+        let titleButton = evt.currentTarget;
+
+        // Récupérons l'article correspondant au bouton titre cliqué
+        let post = titleButton.closest('.card-post');
+        // Récupérons l'Id de l'article correspondant au bouton titre cliqué
+        let postId = post.dataset.id;
+
+        console.log(postId);
+
+        app.getPostsOnNoneDisplay();
+
+        let postElement = document.querySelectorAll('.card-post');
+
+        for(let i = 0 ; i < postElement.length ; i++){
+            if(postElement[i].dataset.id === postId){
+                postElement[i].style.display = "block";
+                postElement[i].querySelector('.card-text').style.display = "none";
+                postElement[i].querySelector('.card-text-content').style.display = "block";
+            }
+        }
+
+    },    
     // Méthode lié à la méthode handleClickButtonForCategory() et handleClickButtonForAuthor() pour passer tout les posts en display none
     getPostsOnNoneDisplay: function(){
         // On récupère tout les posts et on les passe à display none
