@@ -273,8 +273,8 @@ let app = {
             for(let i = 0 ; i < postElement.length ; i++){
                 if(postElement[i].dataset.categoryId === filterButton.dataset.categoryId){
                     postElement[i].style.display = "block";
-                    postElement[i].querySelector('.card-text').style.display = "block";
-                    postElement[i].querySelector('.card-text-content').style.display = "none";
+                    //remettre le content d'un article en display none
+                    app.getPostContentOnNoneDisplay();
                 }
             }
         }
@@ -295,8 +295,9 @@ let app = {
             for(let i = 0 ; i < postElement.length ; i++){
                 if(postElement[i].dataset.authorId === filterButton.dataset.authorId){
                     postElement[i].style.display = "block";
-                    postElement[i].querySelector('.card-text').style.display = "block";
-                    postElement[i].querySelector('.card-text-content').style.display = "none";
+                    
+                    //remettre le content d'un article en display none
+                    app.getPostContentOnNoneDisplay();
                 }
             }
         }
@@ -311,8 +312,6 @@ let app = {
         // Récupérons l'Id de l'article correspondant au bouton titre cliqué
         let postId = post.dataset.id;
 
-        console.log(postId);
-
         app.getPostsOnNoneDisplay();
 
         let postElement = document.querySelectorAll('.card-post');
@@ -320,6 +319,7 @@ let app = {
         for(let i = 0 ; i < postElement.length ; i++){
             if(postElement[i].dataset.id === postId){
                 postElement[i].style.display = "block";
+                // Mise en display block du contenu de l'article et mise en none du résumé de l'article
                 postElement[i].querySelector('.card-text').style.display = "none";
                 postElement[i].querySelector('.card-text-content').style.display = "block";
             }
@@ -334,6 +334,11 @@ let app = {
         for(let i = 0 ; i < postElement.length ; i++){
             postElement[i].style.display = "none";
         }
+    },
+    // Méthode pour remettre le content d'un article en display none
+    getPostContentOnNoneDisplay: function(){
+        postElement[i].querySelector('.card-text').style.display = "block";
+        postElement[i].querySelector('.card-text-content').style.display = "none";
     }
 }
 
