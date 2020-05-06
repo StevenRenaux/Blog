@@ -8,3 +8,7 @@ Création d'un mini-site de blog utilisant Lumen comme API en backend et javascr
 
 La BDD est configuré comme le privilégie lumen.
 
+### Inclus dans le dossier docs
+
+- Les visuels une fois fini
+- MCD
